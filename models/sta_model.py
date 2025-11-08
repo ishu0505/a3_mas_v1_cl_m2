@@ -8,7 +8,9 @@ class STAModel(mesa.Model):
     
     def __init__(self, num_agents, num_tasks, task_radius, 
                  required_agents_per_task, agent_speed, 
-                 communication_range=0, seed=None):
+                 communication_range=0, response_duration=60,
+                 use_communication=False, use_calloff=False, 
+                 use_auction=False, seed=None):
         super().__init__()
         
         # Parameters
@@ -18,10 +20,20 @@ class STAModel(mesa.Model):
         self.required_agents_per_task = required_agents_per_task  # Tc
         self.agent_speed = agent_speed  # Rv
         self.communication_range = communication_range  # Rd
+        self.response_duration = response_duration  # Rt
+        
+        # Communication protocol flags
+        self.use_communication = use_communication
+        self.use_calloff = use_calloff
+        self.use_auction = use_auction  # Auction protocol flag
         
         # Statistics
         self.tasks_completed = 0
         self.tasks_completed_per_iteration = []
+        
+        # Agent type tracking (for cost analysis)
+        self.strategic_agents = 0  # Count of agents who discover tasks
+        self.reactive_agents = 0   # Count of agents who respond
         
         # Set random seed if provided
         if seed is not None:
@@ -77,6 +89,10 @@ class STAModel(mesa.Model):
                 tasks_completed_this_iter += 1
                 self.tasks_completed += 1
                 
+                # Emit call-off signal if using call-off protocol
+                if self.use_communication and self.use_calloff:
+                    self.emit_calloff_signal(task)
+                
                 # Release agents working on completed task
                 for agent in task.agents_in_range:
                     agent.release()
@@ -88,6 +104,21 @@ class STAModel(mesa.Model):
         
         # Record statistics
         self.tasks_completed_per_iteration.append(tasks_completed_this_iter)
+    
+    def emit_calloff_signal(self, completed_task):
+        """Emit call-off signal to agents responding to this task."""
+        if self.communication_range <= 0:
+            return
+        
+        # Find agents within communication range of the task
+        for agent in self.agents:
+            if agent.mode == "responding" and agent.target_task == completed_task:
+                distance = np.sqrt(
+                    (agent.pos[0] - completed_task.pos[0])**2 + 
+                    (agent.pos[1] - completed_task.pos[1])**2
+                )
+                if distance <= self.communication_range:
+                    agent.receive_calloff_signal()
     
     def run_model(self, num_iterations):
         """Run the model for a specified number of iterations."""
