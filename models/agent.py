@@ -4,17 +4,22 @@ import numpy as np
 class STAAgent(mesa.Agent):
     """An agent that searches for and completes tasks."""
     
-    def __init__(self, unique_id, model, speed):
+    def __init__(self, unique_id, model, speed, agent_type="reactive"):
         super().__init__(unique_id, model)
         self.speed = speed  # Rv - movement speed per iteration
         self.pos = None  # Will be set by model
         self.current_task = None  # Task agent is working on
         self.mode = "searching"  # searching, waiting, responding
+        self.agent_type = agent_type  # "strategic" or "reactive"
         
         # Communication protocol variables
         self.target_task = None  # Task agent is responding to
         self.response_timer = 0  # Iterations remaining in response mode
         self.discovered_task = False  # Did this agent discover the task via free search?
+        
+        # Auction variables
+        self.current_bid = None  # Current bid in auction
+        self.auction_task = None  # Task being auctioned
         
     def step(self):
         """Execute one step of agent behavior."""
@@ -55,10 +60,52 @@ class STAAgent(mesa.Agent):
                 self.discovered_task = (self.mode != "responding")
                 task.add_agent(self)
                 
-                # Emit call-out signal if using communication protocol
-                if self.model.use_communication and self.discovered_task:
+                # Handle based on protocol
+                if self.model.use_auction and self.discovered_task:
+                    # Auction protocol: become auctioneer
+                    self.conduct_auction(task)
+                elif self.model.use_communication and self.discovered_task:
+                    # Swarm protocol: emit call-out signal
                     self.emit_callout_signal(task)
                 return
+    
+    def conduct_auction(self, task):
+        """Conduct an auction for the discovered task."""
+        if self.model.communication_range <= 0:
+            return
+        
+        # This agent is the auctioneer
+        bidders = []
+        
+        # Find agents within communication range who can bid
+        for agent in self.model.agents:
+            if agent.unique_id == self.unique_id:
+                continue
+            
+            distance = self.distance_to(agent.pos)
+            if distance <= self.model.communication_range:
+                # Agent can participate if in searching mode
+                if agent.mode == "searching":
+                    # Agent bids with their distance to the auctioneer
+                    bid = {
+                        'agent': agent,
+                        'distance': distance
+                    }
+                    bidders.append(bid)
+        
+        # Sort bidders by distance (lower is better)
+        bidders.sort(key=lambda b: b['distance'])
+        
+        # Recruit the closest (Tc - 1) agents (auctioneer already at task)
+        needed = self.model.required_agents_per_task - 1
+        winners = bidders[:needed]
+        
+        # Assign winners to move toward task
+        for winner in winners:
+            agent = winner['agent']
+            agent.mode = "responding"
+            agent.target_task = task
+            agent.response_timer = self.model.response_duration if hasattr(self.model, 'response_duration') else 60
     
     def emit_callout_signal(self, task):
         """Emit a call-out signal to nearby agents."""

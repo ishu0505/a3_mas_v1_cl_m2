@@ -8,8 +8,8 @@ Implementation of CS603 Assignment 3 using Mesa agent-based modeling framework.
 sta_assignment/
 ├── models/
 │   ├── __init__.py
-│   ├── sta_model.py          # Main Mesa model (with communication support)
-│   ├── agent.py              # Agent class (with call-out/call-off protocols)
+│   ├── sta_model.py          # Main Mesa model (with communication + auction)
+│   ├── agent.py              # Agent class (swarm + auction protocols)
 │   └── task.py               # Task class
 ├── experiments/
 │   ├── __init__.py
@@ -18,11 +18,18 @@ sta_assignment/
 │   ├── part1c.py             # Multi-agent coordination (Tc=3)
 │   ├── part1d.py             # Multiple tasks & steady-state
 │   ├── part1e.py             # Call-out protocol
-│   └── part1f.py             # Call-off protocol
+│   ├── part1f.py             # Call-off protocol
+│   ├── part2a.py             # Auction protocol
+│   ├── part2b.py             # Protocol comparison
+│   └── part2c.py             # Cost-benefit analysis
 ├── results/                   # Output plots saved here
 ├── requirements.txt
 ├── run_all_part1.py          # Run all Part 1 experiments
-└── README.md
+├── README.md
+├── PART1_SUMMARY.md          # Part 1 detailed analysis
+├── PART1EF_SUMMARY.md        # Communication protocols
+├── PART2_SUMMARY.md          # Part 2 game theory analysis
+└── QUICKSTART.md             # Quick start guide
 ```
 
 ## Installation
@@ -156,6 +163,69 @@ python run_all_part1.py
 This convenience script runs all Part 1 experiments (a, b, c, d, e, f) in sequence.
 Estimated time: 30-45 minutes for complete suite.
 
+---
+
+## Part 2: Game-Theoretic Auction Model
+
+### Part 2(a): Auction Protocol Implementation
+
+```bash
+python experiments/part2a.py
+```
+
+This will:
+- Implement distance-based auction mechanism
+- Discoverer becomes auctioneer, recruits closest (Tc-1) agents
+- Test with Rd = 0, 100, 200, 300, 400, 600, 1000, 1400
+- Run 20 simulations per Rd value
+- Generate performance analysis plots:
+  - Auction performance vs communication range
+  - Improvement over random benchmark
+  - Distribution analysis
+  - Optimal configuration identification
+- Compare with random baseline
+- Save results to `results/part2a_results.png`
+
+### Part 2(b): Protocol Comparison
+
+```bash
+python experiments/part2b.py
+```
+
+This will:
+- Compare all 4 protocols: Random, Call-Out, Call-Off, Auction
+- Run all protocols at each Rd value
+- Run 20 simulations per protocol per Rd
+- Generate comprehensive comparison plots:
+  - Head-to-head performance across all Rd
+  - Improvement analysis
+  - Winner analysis at each Rd
+  - Box plot distributions
+  - Pairwise comparison matrix
+  - Average performance analysis
+- Detailed performance rankings and insights
+- Save results to `results/part2b_results.png`
+
+### Part 2(c): Cost-Benefit Analysis
+
+```bash
+python experiments/part2c.py
+```
+
+This will:
+- Analyze cost-adjusted performance (strategic agents cost 2×)
+- Calculate cost per task: Auction = 4 units, Swarm = 3 units
+- Run all protocols for cost comparison
+- Generate cost analysis plots:
+  - Raw vs cost-adjusted performance
+  - Cost efficiency ratios
+  - Value proposition analysis
+  - Break-even analysis
+  - Resource budget comparison
+- Determine if auction's complexity is justified
+- Provide practical recommendations
+- Save results to `results/part2c_results.png`
+
 ## Implementation Details
 
 ### Random Movement Model (Part 1a)
@@ -251,6 +321,30 @@ This ensures uniform exploration of the search space.
 - **Key insight**: Release mechanism crucial for efficient swarm coordination
 - **Total improvement over random**: 25-50% at optimal Rd
 - Demonstrates superiority of bidirectional communication
+
+### Part 2(a) - Auction Protocol
+- **Distance-based bidding**: Agents bid with distance to auctioneer
+- **Optimal agent selection**: Closest (Tc-1) agents recruited
+- **Performance**: ~41% improvement over random at Rd=400
+- **Game-theoretic foundation**: Systematic coordination
+- **Trade-off**: More complex than swarm protocols
+- Competitive but not superior to call-off
+
+### Part 2(b) - Protocol Comparison
+- **Winner**: Call-Off outperforms Auction (0.217 vs 0.205)
+- **Key finding**: Early release > optimal selection
+- **Call-Off wins**: 6/8 configurations across Rd values
+- **Auction advantages**: Systematic allocation, predictable
+- **Call-Off advantages**: Better resource management, simpler
+- Swarm intelligence with release beats game theory
+
+### Part 2(c) - Cost-Benefit Analysis
+- **Cost model**: Strategic agents (2×) vs Reactive agents (1×)
+- **Per-task cost**: Auction = 4 units, Swarm = 3 units
+- **Cost-adjusted winner**: Call-Off (0.072 vs 0.051 tasks/unit)
+- **Verdict**: Auction's 33% cost premium NOT justified
+- **Break-even**: Auction needs +33% performance (achieves -5%)
+- **Recommendation**: Use Call-Off for best cost-performance
 
 ## Analysis Questions (Part 1a)
 

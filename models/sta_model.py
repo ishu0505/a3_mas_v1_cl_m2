@@ -9,7 +9,8 @@ class STAModel(mesa.Model):
     def __init__(self, num_agents, num_tasks, task_radius, 
                  required_agents_per_task, agent_speed, 
                  communication_range=0, response_duration=60,
-                 use_communication=False, use_calloff=False, seed=None):
+                 use_communication=False, use_calloff=False, 
+                 use_auction=False, seed=None):
         super().__init__()
         
         # Parameters
@@ -24,10 +25,15 @@ class STAModel(mesa.Model):
         # Communication protocol flags
         self.use_communication = use_communication
         self.use_calloff = use_calloff
+        self.use_auction = use_auction  # Auction protocol flag
         
         # Statistics
         self.tasks_completed = 0
         self.tasks_completed_per_iteration = []
+        
+        # Agent type tracking (for cost analysis)
+        self.strategic_agents = 0  # Count of agents who discover tasks
+        self.reactive_agents = 0   # Count of agents who respond
         
         # Set random seed if provided
         if seed is not None:
