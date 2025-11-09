@@ -1,0 +1,124 @@
+============================================================
+Part 1(b): Performance as Function of Agent Number
+============================================================
+
+Parameters:
+  Agent counts (R): [3, 5, 10, 20, 30]
+  Number of tasks (T): 1
+  Task radius (Tr): 50
+  Required agents per task (Tc): 1
+  Agent speed (Rv): 25
+  Iterations per run: 1000
+  Number of runs: 10
+
+========================================
+Running simulations for R = 3 agents
+========================================
+D:\study_n_docs\SMU\mas\succ_claude\a3_mas_v1_cl_m2\models\sta_model.py:44: UserWarning: You are trying to set model.agents. In a next release, this attribute is used by MESA itself so you cannot use it directly anymore.Please adjust your code to use a different attribute name for custom agent storage
+  self.agents = []
+  Run 1/10: 0.0000 tasks/iteration
+  Run 2/10: 0.0000 tasks/iteration
+  Run 3/10: 0.0000 tasks/iteration
+  Run 4/10: 0.0000 tasks/iteration
+  Run 5/10: 0.0000 tasks/iteration
+  Run 6/10: 0.0010 tasks/iteration
+  Run 7/10: 0.0020 tasks/iteration
+  Run 8/10: 0.0010 tasks/iteration
+  Run 9/10: 0.0020 tasks/iteration
+  Run 10/10: 0.0010 tasks/iteration
+  Mean: 0.0007 ± 0.0008
+
+========================================
+Running simulations for R = 5 agents
+========================================
+  Run 1/10: 0.0000 tasks/iteration
+  Run 2/10: 0.0010 tasks/iteration
+  Run 3/10: 0.0010 tasks/iteration
+  Run 4/10: 0.0000 tasks/iteration
+  Run 5/10: 0.0000 tasks/iteration
+  Run 6/10: 0.0000 tasks/iteration
+  Run 7/10: 0.0010 tasks/iteration
+  Run 8/10: 0.0030 tasks/iteration
+  Run 9/10: 0.0020 tasks/iteration
+  Run 10/10: 0.0000 tasks/iteration
+  Mean: 0.0008 ± 0.0010
+
+========================================
+Running simulations for R = 10 agents
+========================================
+  Run 1/10: 0.0050 tasks/iteration
+  Run 2/10: 0.0000 tasks/iteration
+  Run 3/10: 0.0050 tasks/iteration
+  Run 4/10: 0.0020 tasks/iteration
+  Run 5/10: 0.0000 tasks/iteration
+  Run 6/10: 0.0020 tasks/iteration
+  Run 7/10: 0.0050 tasks/iteration
+  Run 8/10: 0.0030 tasks/iteration
+  Run 9/10: 0.0000 tasks/iteration
+  Run 10/10: 0.0010 tasks/iteration
+  Mean: 0.0023 ± 0.0020
+
+========================================
+Running simulations for R = 20 agents
+========================================
+  Run 1/10: 0.0080 tasks/iteration
+  Run 2/10: 0.0030 tasks/iteration
+  Run 3/10: 0.0010 tasks/iteration
+  Run 4/10: 0.0060 tasks/iteration
+  Run 5/10: 0.0020 tasks/iteration
+  Run 6/10: 0.0010 tasks/iteration
+  Run 7/10: 0.0020 tasks/iteration
+  Run 8/10: 0.0040 tasks/iteration
+  Run 9/10: 0.0010 tasks/iteration
+  Run 10/10: 0.0030 tasks/iteration
+  Mean: 0.0031 ± 0.0022
+
+========================================
+Running simulations for R = 30 agents
+========================================
+  Run 1/10: 0.0070 tasks/iteration
+  Run 2/10: 0.0050 tasks/iteration
+  Run 3/10: 0.0160 tasks/iteration
+  Run 4/10: 0.0080 tasks/iteration
+  Run 5/10: 0.0240 tasks/iteration
+  Run 6/10: 0.0120 tasks/iteration
+  Run 7/10: 0.0130 tasks/iteration
+  Run 8/10: 0.0080 tasks/iteration
+  Run 9/10: 0.0130 tasks/iteration
+  Run 10/10: 0.0150 tasks/iteration
+  Mean: 0.0121 ± 0.0053
+D:\study_n_docs\SMU\mas\succ_claude\a3_mas_v1_cl_m2\experiments\part1b.py:99: MatplotlibDeprecationWarning: The 'labels' parameter of boxplot() has been renamed 'tick_labels' since Matplotlib 3.9; support for the old name will be dropped in 3.11.
+  ax2.boxplot(box_data, labels=agent_counts)
+
+============================================================
+Plot saved to: results/part1b_results.png
+
+============================================================
+SUMMARY TABLE:
+============================================================
+Agents (R)   Mean Rate       Std Dev         Efficiency
+------------------------------------------------------------
+3            0.0007          0.0008          0.0002
+5            0.0008          0.0010          0.0002
+10           0.0023          0.0020          0.0002
+20           0.0031          0.0022          0.0002
+30           0.0121          0.0053          0.0004
+
+============================================================
+ANALYSIS:
+============================================================
+
+Key Observations:
+1. Performance increases with more agents (more coverage)
+2. With T=1 and Tc=1, only 1 agent works at a time
+3. Additional agents increase probability of finding task
+4. Efficiency (per-agent) decreases with more agents (diminishing returns)
+
+Expected Behavior:
+- Linear improvement initially (more agents = more coverage)
+- Diminishing returns as search area saturates
+- Theoretical maximum: ~127.32 tasks (area coverage)
+
+Scalability:
+- Going from 3 to 30 agents: 17.29x improvement
+- But efficiency drops from 0.0002 to 0.0004 per agent
