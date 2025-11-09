@@ -149,16 +149,7 @@ This will:
 - Demonstrate efficiency gains from early release mechanism
 - Save results to `results/part1f_results.png`
 
-### Run All Part 1 Experiments
 
-```bash
-python run_all_part1.py
-```
-
-This convenience script runs all Part 1 experiments (a, b, c, d, e, f) in sequence.
-Estimated time: 30-45 minutes for complete suite.
-
----
 
 ## Part 2: Game-Theoretic Auction Model
 
