@@ -250,102 +250,7 @@ This ensures uniform exploration of the search space.
 | Iterations | - | 1000 (a,b,c), 3000 (d), 2000 (e,f) |
 | Simulation runs | - | 1 (a), 10 (b,c), 20 (d,e,f) |
 
-## Expected Results
 
-### Part 1(a)
-- Binary completion pattern (0 or 1 task per iteration)
-- Average rate depends on coverage probability
-- Theoretical expected time between tasks based on random search
-
-### Part 1(b)
-- **Linear improvement** with more agents (better coverage)
-- **Diminishing returns** visible in efficiency plot
-- With T=1, Tc=1: only 1 agent works at a time (others redundant until task found)
-- More agents = higher probability of finding task quickly
-
-### Part 1(c)
-- **Lower performance** than Tc=1 due to coordination requirements
-- Performance gap ~40-60% at low agent counts
-- Gap narrows with more agents (better coverage enables coordination)
-- Efficiency per agent is lower (coordination overhead)
-- Critical threshold around R=10 where system becomes viable
-- Motivates need for communication protocols (Parts 1e-f)
-
-### Part 1(d)
-- **Steady-state convergence**:
-  - T=2: ~400-600 iterations to stabilize
-  - T=10: ~600-800 iterations
-  - T=20: ~800-1000 iterations
-- More tasks → longer convergence time (more system states)
-- **Statistical requirements**:
-  - 15-25 runs needed for <5% relative error at 95% confidence
-  - Higher T values have more variance (need more runs)
-- **Performance scaling**:
-  - More tasks → more completions but lower per-task rate
-  - Agent resources spread across tasks
-  - Establishes "random benchmark" for Parts 1(e-f) comparison
-
-### Part 1(e) - Call-Out Protocol
-- **Clear improvement** over random search: 20-40% at optimal Rd
-- **Optimal communication range**: Rd ≈ 400-600
-  - Too small: insufficient agent recruitment
-  - Too large: over-commitment, wasted resources
-- **Key behavior**:
-  - Agents discovering tasks emit signals
-  - Nearby agents respond by moving toward task
-  - Response lasts Rt=60 iterations (commitment window)
-- **Limitations**:
-  - Agents locked in response mode even after task completes
-  - Wasted agent-time when tasks finish early
-  - Motivates call-off protocol
-
-### Part 1(f) - Call-Off Protocol
-- **Additional 5-15% improvement** over call-out
-- **Early release mechanism**: Agents freed immediately on task completion
-- **Better resource utilization**: More agents available for new tasks
-- **More robust** to large communication ranges
-- **Key insight**: Release mechanism crucial for efficient swarm coordination
-- **Total improvement over random**: 25-50% at optimal Rd
-- Demonstrates superiority of bidirectional communication
-
-### Part 2(a) - Auction Protocol
-- **Distance-based bidding**: Agents bid with distance to auctioneer
-- **Optimal agent selection**: Closest (Tc-1) agents recruited
-- **Performance**: ~41% improvement over random at Rd=400
-- **Game-theoretic foundation**: Systematic coordination
-- **Trade-off**: More complex than swarm protocols
-- Competitive but not superior to call-off
-
-### Part 2(b) - Protocol Comparison
-- **Winner**: Call-Off outperforms Auction (0.217 vs 0.205)
-- **Key finding**: Early release > optimal selection
-- **Call-Off wins**: 6/8 configurations across Rd values
-- **Auction advantages**: Systematic allocation, predictable
-- **Call-Off advantages**: Better resource management, simpler
-- Swarm intelligence with release beats game theory
-
-### Part 2(c) - Cost-Benefit Analysis
-- **Cost model**: Strategic agents (2×) vs Reactive agents (1×)
-- **Per-task cost**: Auction = 4 units, Swarm = 3 units
-- **Cost-adjusted winner**: Call-Off (0.072 vs 0.051 tasks/unit)
-- **Verdict**: Auction's 33% cost premium NOT justified
-- **Break-even**: Auction needs +33% performance (achieves -5%)
-- **Recommendation**: Use Call-Off for best cost-performance
-
-## Analysis Questions (Part 1a)
-
-**Q: What is a good movement model?**
-- Uniform random walk ensures even exploration
-- Alternative: Lévy flight for more efficient search
-- Current model: simple, unbiased, mathematically tractable
-
-**Q: Is tasks per iteration a good measure?**
-- **For single agent**: Too noisy (binary signal)
-- **Better metrics**: 
-  - Average completion rate (what we use)
-  - Mean time between completions
-  - Spatial coverage efficiency
-- **For multiple agents**: More stable, shows clear trends
 
 ## Code Structure
 
@@ -360,14 +265,6 @@ Mesa framework provides:
 - Built-in random number generation
 - Easy iteration and data collection
 
-## Next Steps
-
-For remaining parts of the assignment:
-- **Part 1(c)**: Set Tc=3, rerun experiments
-- **Part 1(d)**: Increase T=[2,10,20], analyze steady-state
-- **Part 1(e)**: Implement "call-out" protocol with Rd communication
-- **Part 1(f)**: Implement "call-off" protocol
-- **Part 2**: Game-theoretic auction model
 
 ## Troubleshooting
 
