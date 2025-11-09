@@ -1,0 +1,212 @@
+================================================================================
+Part 2(a): Auction-Based Coordination
+================================================================================
+
+Parameters:
+  Number of agents (R): 30
+  Number of tasks (T): 2
+  Task radius (Tr): 50
+  Required agents per task (Tc): 3
+  Agent speed (Rv): 25
+  Communication ranges (Rd): [0, 100, 200, 300, 400, 600, 1000, 1400]
+  Total iterations: 2000 (warmup: 1000)
+  Number of runs: 20
+
+  Protocol: Distance-based auction
+    - Discoverer = Auctioneer
+    - Bidders = Agents within Rd
+    - Bid = Distance to auctioneer
+    - Winners = Closest (Tc-1) agents
+
+================================================================================
+Running RANDOM BENCHMARK...
+================================================================================
+D:\study_n_docs\SMU\mas\succ_claude\a3_mas_v1_cl_m2\models\sta_model.py:44: UserWarning: You are trying to set model.agents. In a next release, this attribute is used by MESA itself so you cannot use it directly anymore.Please adjust your code to use a different attribute name for custom agent storage
+  self.agents = []
+  Completed 5/20 runs...
+  Completed 10/20 runs...
+  Completed 15/20 runs...
+  Completed 20/20 runs...
+  Benchmark Mean: 0.0029 ± 0.0012
+
+================================================================================
+Testing Auction Protocol with Rd = 0
+================================================================================
+  Completed 5/20 runs...
+  Completed 10/20 runs...
+  Completed 15/20 runs...
+  Completed 20/20 runs...
+  Mean: 0.0029 ± 0.0012
+  Improvement over random: +0.00%
+
+================================================================================
+Testing Auction Protocol with Rd = 100
+================================================================================
+  Completed 5/20 runs...
+  Completed 10/20 runs...
+  Completed 15/20 runs...
+  Completed 20/20 runs...
+  Mean: 0.0036 ± 0.0023
+  Improvement over random: +26.32%
+
+================================================================================
+Testing Auction Protocol with Rd = 200
+================================================================================
+  Completed 5/20 runs...
+  Completed 10/20 runs...
+  Completed 15/20 runs...
+  Completed 20/20 runs...
+  Mean: 0.0054 ± 0.0033
+  Improvement over random: +89.47%
+
+================================================================================
+Testing Auction Protocol with Rd = 300
+================================================================================
+  Completed 5/20 runs...
+  Completed 10/20 runs...
+  Completed 15/20 runs...
+  Completed 20/20 runs...
+  Mean: 0.0120 ± 0.0039
+  Improvement over random: +321.05%
+
+================================================================================
+Testing Auction Protocol with Rd = 400
+================================================================================
+  Completed 5/20 runs...
+  Completed 10/20 runs...
+  Completed 15/20 runs...
+  Completed 20/20 runs...
+  Mean: 0.0112 ± 0.0040
+  Improvement over random: +292.98%
+
+================================================================================
+Testing Auction Protocol with Rd = 600
+================================================================================
+  Completed 5/20 runs...
+  Completed 10/20 runs...
+  Completed 15/20 runs...
+  Completed 20/20 runs...
+  Mean: 0.0116 ± 0.0044
+  Improvement over random: +307.02%
+
+================================================================================
+Testing Auction Protocol with Rd = 1000
+================================================================================
+  Completed 5/20 runs...
+  Completed 10/20 runs...
+  Completed 15/20 runs...
+  Completed 20/20 runs...
+  Mean: 0.0116 ± 0.0044
+  Improvement over random: +307.02%
+
+================================================================================
+Testing Auction Protocol with Rd = 1400
+================================================================================
+  Completed 5/20 runs...
+  Completed 10/20 runs...
+  Completed 15/20 runs...
+  Completed 20/20 runs...
+  Mean: 0.0116 ± 0.0044
+  Improvement over random: +307.02%
+D:\study_n_docs\SMU\mas\succ_claude\a3_mas_v1_cl_m2\experiments\part2a.py:170: MatplotlibDeprecationWarning: The 'labels' parameter of boxplot() has been renamed 'tick_labels' since Matplotlib 3.9; support for the old name will be dropped in 3.11.
+  bp = ax3.boxplot(box_data, labels=[f'Rd={r}' for r in selected_ranges],
+
+================================================================================
+Plot saved to: results/part2a_results.png
+
+================================================================================
+AUCTION PROTOCOL RESULTS:
+================================================================================
+Rd       Mean         Std          Improvement     Ratio      CV(%)
+--------------------------------------------------------------------------------
+0        0.0029       0.0012       0.00          % 1.000      43.37
+100      0.0036       0.0023       26.32         % 1.263      64.79
+200      0.0054       0.0033       89.47         % 1.895      61.53
+300      0.0120       0.0039       321.05        % 4.211      32.81
+400      0.0112       0.0040       292.98        % 3.930      36.00
+600      0.0116       0.0044       307.02        % 4.070      37.71
+1000     0.0116       0.0044       307.02        % 4.070      37.71
+1400     0.0116       0.0044       307.02        % 4.070      37.71
+
+================================================================================
+ANALYSIS:
+================================================================================
+
+1. AUCTION PROTOCOL PERFORMANCE:
+
+   Random Benchmark: 0.0029 ± 0.0012 tasks/iteration
+   Best Auction (Rd=300): 0.0120 ± 0.0039
+   Maximum Improvement: 321.05%
+
+2. HOW AUCTION WORKS:
+
+   Discovery Phase:
+   - Agent finds task via random search
+   - Becomes "auctioneer" for that task
+
+   Auction Phase:
+   - All agents within Rd can participate
+   - Each bidder bids their distance to auctioneer
+   - Lower distance = better bid
+
+   Allocation Phase:
+   - Auctioneer sorts bids by distance
+   - Recruits (Tc-1) closest agents
+   - Winners move toward task
+
+   Execution Phase:
+   - Agents work on task when all arrive
+   - Task completes, agents released
+
+3. AUCTION VS RANDOM SEARCH:
+
+   Key Differences:
+   ✓ Intelligent allocation (closest agents recruited)
+   ✓ Efficient resource utilization
+   ✓ Distance-based optimization
+   ✓ Game-theoretic coordination
+
+   vs Random:
+   ✗ Still relies on chance discovery
+   ✗ No call-off mechanism (yet)
+   ✗ Agents committed until task completion
+
+4. COMMUNICATION RANGE EFFECTS:
+
+   Rd=0: 0.0029 (no auction, same as random)
+   Rd=100-300: 0.0070 (limited bidder pool)
+   Rd=400-600: 0.0114 (optimal range)
+   Rd=1000+: 0.0116 (many bidders)
+
+5. OPTIMAL CONFIGURATION:
+
+   Best Rd: 300
+   Expected Performance: 0.0120 tasks/iteration
+   Improvement: 321.05% over random
+
+6. AUCTION ADVANTAGES:
+
+   ✓ Distance-based selection (optimal routing)
+   ✓ Competitive bidding (efficient allocation)
+   ✓ Game-theoretic optimality
+   ✓ Scalable coordination mechanism
+
+7. AUCTION LIMITATIONS:
+
+   ✗ Still no early release (agents wait until task completes)
+   ✗ Auction overhead (communication, computation)
+   ✗ Requires agent ranking/sorting
+   ✗ More complex than swarm signaling
+
+8. COMPARISON TO EXPECTATIONS:
+
+   Auction should provide:
+   - Better agent selection than random response
+   - More efficient routing (closest agents)
+   - Game-theoretic optimality
+
+   Observed: ~321% improvement at Rd=300
+   This is competitive with swarm methods!
+
+
+Results saved to: results/part2a_data.npy

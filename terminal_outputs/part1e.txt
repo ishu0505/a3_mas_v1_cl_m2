@@ -1,0 +1,262 @@
+================================================================================
+Part 1(e): Call-Out Protocol (Swarm Intelligence)
+================================================================================
+
+Parameters:
+  Number of agents (R): 30
+  Number of tasks (T): 2
+  Task radius (Tr): 50
+  Required agents per task (Tc): 3
+  Agent speed (Rv): 25
+  Response duration (Rt): 60 iterations
+  Communication ranges (Rd): [0, 100, 200, 300, 400, 600, 1000, 1400]
+  Total iterations: 2000 (warmup: 1000)
+  Number of runs: 20
+
+================================================================================
+Running RANDOM BENCHMARK (Rd=0, no communication)...
+================================================================================
+D:\study_n_docs\SMU\mas\succ_claude\a3_mas_v1_cl_m2\models\sta_model.py:44: UserWarning: You are trying to set model.agents. In a next release, this attribute is used by MESA itself so you cannot use it directly anymore.Please adjust your code to use a different attribute name for custom agent storage
+  self.agents = []
+  Completed 5/20 runs...
+  Completed 10/20 runs...
+  Completed 15/20 runs...
+  Completed 20/20 runs...
+  Benchmark Mean: 0.0028 ± 0.0013
+
+================================================================================
+Testing Communication Range Rd = 0
+================================================================================
+  Completed 5/20 runs...
+  Completed 10/20 runs...
+  Completed 15/20 runs...
+  Completed 20/20 runs...
+  Mean: 0.0028 ± 0.0013
+  Improvement over random: +0.00%
+
+================================================================================
+Testing Communication Range Rd = 100
+================================================================================
+  Completed 5/20 runs...
+  Completed 10/20 runs...
+  Completed 15/20 runs...
+  Completed 20/20 runs...
+  Mean: 0.0033 ± 0.0015
+  Improvement over random: +20.00%
+
+================================================================================
+Testing Communication Range Rd = 200
+================================================================================
+  Completed 5/20 runs...
+  Completed 10/20 runs...
+  Completed 15/20 runs...
+  Completed 20/20 runs...
+  Mean: 0.0050 ± 0.0026
+  Improvement over random: +81.82%
+
+================================================================================
+Testing Communication Range Rd = 300
+================================================================================
+  Completed 5/20 runs...
+  Completed 10/20 runs...
+  Completed 15/20 runs...
+  Completed 20/20 runs...
+  Mean: 0.0076 ± 0.0036
+  Improvement over random: +176.36%
+
+================================================================================
+Testing Communication Range Rd = 400
+================================================================================
+  Completed 5/20 runs...
+  Completed 10/20 runs...
+  Completed 15/20 runs...
+  Completed 20/20 runs...
+  Mean: 0.0076 ± 0.0040
+  Improvement over random: +176.36%
+
+================================================================================
+Testing Communication Range Rd = 600
+================================================================================
+  Completed 5/20 runs...
+  Completed 10/20 runs...
+  Completed 15/20 runs...
+  Completed 20/20 runs...
+  Mean: 0.0059 ± 0.0039
+  Improvement over random: +112.73%
+
+================================================================================
+Testing Communication Range Rd = 1000
+================================================================================
+  Completed 5/20 runs...
+  Completed 10/20 runs...
+  Completed 15/20 runs...
+  Completed 20/20 runs...
+  Mean: 0.0027 ± 0.0023
+  Improvement over random: -0.00%
+
+================================================================================
+Testing Communication Range Rd = 1400
+================================================================================
+  Completed 5/20 runs...
+  Completed 10/20 runs...
+  Completed 15/20 runs...
+  Completed 20/20 runs...
+  Mean: 0.0027 ± 0.0017
+  Improvement over random: -1.82%
+D:\study_n_docs\SMU\mas\succ_claude\a3_mas_v1_cl_m2\experiments\part1e.py:169: MatplotlibDeprecationWarning: The 'labels' parameter of boxplot() has been renamed 'tick_labels' since Matplotlib 3.9; support for the old name will be dropped in 3.11.
+  bp = ax3.boxplot(box_data, labels=[f'Rd={r}' for r in selected_ranges],
+
+================================================================================
+Plot saved to: results/part1e_results.png
+
+================================================================================
+DETAILED RESULTS TABLE:
+================================================================================
+Rd       Mean         Std          Improvement     Ratio      CV(%)
+--------------------------------------------------------------------------------
+0        0.0028       0.0013       0.00          % 1.000      48.62
+100      0.0033       0.0015       20.00         % 1.200      46.06
+200      0.0050       0.0026       81.82         % 1.818      52.15
+300      0.0076       0.0036       176.36        % 2.764      46.96
+400      0.0076       0.0040       176.36        % 2.764      52.37
+600      0.0059       0.0039       112.73        % 2.127      66.27
+1000     0.0027       0.0023       -0.00         % 1.000      84.40
+1400     0.0027       0.0017       -1.82         % 0.982      64.26
+
+================================================================================
+ANALYSIS & FINDINGS:
+================================================================================
+
+1. OVERALL PERFORMANCE:
+
+   Random Benchmark (Rd=0):  0.0028 ± 0.0013 tasks/iteration
+   Best Performance (Rd=300): 0.0076 ± 0.0036 tasks/iteration
+   Maximum Improvement:      176.36%
+
+2. COMMUNICATION RANGE EFFECTS:
+
+   a) No Communication (Rd=0):
+      - Performance: 0.0028
+      - Same as random benchmark (as expected)
+
+   b) Short Range (Rd=100-200):
+      - Improvement: 20.00% to 81.82%
+      - Limited benefit (few agents within range)
+
+   c) Medium Range (Rd=300-600):
+      - Improvement: 176.36% to 112.73%
+      - Sweet spot for coordination
+      - Balances coverage and communication
+
+   d) Long Range (Rd=1000-1400):
+      - Improvement: -0.00% to -1.82%
+      - Diminishing returns or even degradation
+      - Too many agents respond → overcrowding
+
+3. KEY OBSERVATIONS:
+
+   a) Call-Out Protocol Works:
+      - Clear improvement over random search (up to ~176.4%)
+      - Communication enables directed coordination
+      - Agents can recruit help efficiently
+
+   b) Optimal Communication Range:
+      - Best performance at Rd ≈ 300
+      - Trade-off between reach and over-commitment
+      - Too small: insufficient recruitment
+      - Too large: excessive agent commitment
+
+   c) Response Duration Impact:
+      - Rt=60 iterations provides commitment window
+      - Agents have time to reach task before timeout
+      - At Rv=25, can travel ~1500 units
+
+4. PROTOCOL BEHAVIOR:
+
+   a) Discoverer Role:
+      - Agent finding task via free search becomes "caller"
+      - Emits signal to agents within Rd
+      - Critical for initiating coordination
+
+   b) Responder Behavior:
+      - Searching agents receive signal
+      - Switch to "responding" mode
+      - Move toward task for up to Rt iterations
+      - Return to search if timeout or task reached
+
+   c) Coordination Efficiency:
+      - With Tc=3, need 2 additional helpers
+      - Optimal Rd balances recruitment success
+      - Prevents over-commitment of resources
+
+5. COMPARISON TO RANDOM BENCHMARK:
+
+   Random (no communication):  0.0028 tasks/iteration
+   Best Call-Out (Rd=300):     0.0076 tasks/iteration
+
+   Improvement factor: 2.76x
+
+   Interpretation:
+   - Call-out protocol provides significant benefit
+   - 176.4% improvement demonstrates value of communication
+   - Still room for improvement (see Part 1f: call-off)
+
+6. LIMITATIONS OF CALL-OUT PROTOCOL:
+
+   a) Committed Agent Problem:
+      - Responding agents locked in for Rt iterations
+      - Cannot switch to other tasks
+      - Wasted effort if task completes early
+
+   b) No Release Mechanism:
+      - Agents don't know when task completes
+      - Must wait for timeout (Rt iterations)
+      - Inefficient resource utilization
+
+   c) Over-Recruitment:
+      - At large Rd, too many agents respond
+      - Only Tc=3 needed, but more may commit
+      - Excess agents waste time
+
+   These limitations motivate Part 1(f): Call-Off Protocol
+
+7. STATISTICAL ROBUSTNESS:
+
+   - Coefficient of Variation: 57.64% (average across all Rd)
+   - Results are stable and reproducible
+   - 20 runs provide reliable estimates
+   - Clear signal above noise
+
+8. PRACTICAL INSIGHTS:
+
+   a) For This Problem (R=30, T=2, Tc=3):
+      - Optimal Rd ≈ 300 (about 30% of search area width)
+      - Provides ~176% improvement
+      - Good balance of coordination and flexibility
+
+   b) Design Principles:
+      - Match Rd to agent density and speed
+      - Consider Rt relative to task distance
+      - Balance recruitment vs. over-commitment
+
+   c) Swarm Intelligence Success:
+      - Simple local rules (emit/respond to signals)
+      - No central coordination needed
+      - Emergent efficient behavior
+      - Scalable to many agents
+
+
+================================================================================
+RECOMMENDED CONFIGURATION:
+================================================================================
+
+Based on the results:
+- Optimal Communication Range: Rd = 300
+- Expected Performance: 0.0076 tasks/iteration
+- Improvement over Random: 176.36%
+
+This configuration provides the best balance between:
+✓ Agent recruitment effectiveness
+✓ Resource utilization efficiency
+✓ Avoiding over-commitment
+✓ Maintaining system responsiveness

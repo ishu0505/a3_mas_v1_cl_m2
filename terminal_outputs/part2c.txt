@@ -1,0 +1,208 @@
+================================================================================
+Part 2(c): Cost-Benefit Analysis
+================================================================================
+
+Cost Model:
+  Strategic Agent (Auctioneer): Cost = 2 units
+  Reactive Agent (Helper/Swarm): Cost = 1 unit
+
+Per-Task Costs:
+  Auction: 1 strategic + 2 reactive = 2 + 2 = 4 units
+  Swarm:   3 reactive = 3 units
+
+Cost ratio: Auction/Swarm = 1.333x
+
+================================================================================
+Running simulations for all protocols...
+================================================================================
+
+Testing Rd = 0...
+D:\study_n_docs\SMU\mas\succ_claude\a3_mas_v1_cl_m2\models\sta_model.py:44: UserWarning: You are trying to set model.agents. In a next release, this attribute is used by MESA itself so you cannot use it directly anymore.Please adjust your code to use a different attribute name for custom agent storage
+  self.agents = []
+  Call-Out: 0.0028
+  Call-Off: 0.0028
+  Auction:  0.0028
+
+Testing Rd = 100...
+  Call-Out: 0.0036
+  Call-Off: 0.0036
+  Auction:  0.0038
+
+Testing Rd = 200...
+  Call-Out: 0.0053
+  Call-Off: 0.0056
+  Auction:  0.0064
+
+Testing Rd = 300...
+  Call-Out: 0.0066
+  Call-Off: 0.0080
+  Auction:  0.0111
+
+Testing Rd = 400...
+  Call-Out: 0.0082
+  Call-Off: 0.0082
+  Auction:  0.0131
+
+Testing Rd = 600...
+  Call-Out: 0.0056
+  Call-Off: 0.0047
+  Auction:  0.0131
+
+Testing Rd = 1000...
+  Call-Out: 0.0040
+  Call-Off: 0.0045
+  Auction:  0.0131
+
+Testing Rd = 1400...
+  Call-Out: 0.0034
+  Call-Off: 0.0036
+  Auction:  0.0131
+
+================================================================================
+Plot saved to: results/part2c_results.png
+
+====================================================================================================
+COST-BENEFIT ANALYSIS:
+====================================================================================================
+Rd       Protocol     Raw Perf     Cost     Adj Perf     vs CallOff
+----------------------------------------------------------------------------------------------------
+0        Call-Out     0.0028       3        0.0009             +0.00%
+0        Call-Off     0.0028       3        0.0009             +0.00%
+0        Auction      0.0028       4        0.0007            -25.00%
+100      Call-Out     0.0036       3        0.0012             -1.39%
+100      Call-Off     0.0036       3        0.0012             +0.00%
+100      Auction      0.0038       4        0.0009            -21.87%
+200      Call-Out     0.0053       3        0.0018             -4.50%
+200      Call-Off     0.0056       3        0.0019             +0.00%
+200      Auction      0.0064       4        0.0016            -13.51%
+300      Call-Out     0.0066       3        0.0022            -17.61%
+300      Call-Off     0.0080       3        0.0027             +0.00%
+300      Auction      0.0111       4        0.0028             +4.25%
+400      Call-Out     0.0082       3        0.0027             +0.00%
+400      Call-Off     0.0082       3        0.0027             +0.00%
+400      Auction      0.0131       4        0.0033            +19.36%
+600      Call-Out     0.0056       3        0.0019            +19.15%
+600      Call-Off     0.0047       3        0.0016             +0.00%
+600      Auction      0.0131       4        0.0033           +108.24%
+1000     Call-Out     0.0040       3        0.0013            -11.11%
+1000     Call-Off     0.0045       3        0.0015             +0.00%
+1000     Auction      0.0131       4        0.0033           +117.50%
+1400     Call-Out     0.0034       3        0.0011             -4.23%
+1400     Call-Off     0.0036       3        0.0012             +0.00%
+1400     Auction      0.0131       4        0.0033           +175.70%
+
+====================================================================================================
+COMPREHENSIVE COST-BENEFIT FINDINGS:
+====================================================================================================
+
+1. COST STRUCTURE:
+
+   Per-Task Agent Costs:
+   - Call-Out:  3 units (3 reactive @ 1 each)
+   - Call-Off:  3 units (3 reactive @ 1 each)
+   - Auction:   4 units (1 strategic @ 2 + 2 reactive @ 1)
+
+   Cost Premium: Auction is 33.3% more expensive per task
+
+2. RAW PERFORMANCE (Without Cost Adjustment):
+
+   Average Performance:
+   - Call-Off: 0.0051 tasks/iteration
+   - Auction:  0.0095 tasks/iteration
+   - Difference: +86.54% (Auction better)
+
+   Best Performance:
+   - Call-Off: 0.0082
+   - Auction:  0.0131
+   - Winner: Auction
+
+3. COST-ADJUSTED PERFORMANCE:
+
+   Average Cost-Adjusted Performance:
+   - Call-Off: 0.0017 tasks/unit-cost
+   - Auction:  0.0024 tasks/unit-cost
+   - Difference: +39.90% (Auction better)
+
+   Best Cost-Adjusted Performance:
+   - Call-Off: 0.0027
+   - Auction:  0.0033
+   - Winner: Auction
+
+4. COST-BENEFIT VERDICT:
+
+   Raw Performance: Auction provides 86.5% advantage
+   Cost-Adjusted:   Auction provides 39.9% advantage
+
+   Cost Impact: Negative
+
+   The 1.3x cost premium is justified
+
+   Recommendation: Use Auction - Cost justified by performance gains
+
+5. DETAILED TRADE-OFF ANALYSIS:
+
+   Factors Favoring Call-Off:
+   ✗ Lower cost-adjusted performance
+   ✓ Lower per-task cost (3 vs 4 units)
+   ✓ Simpler implementation (all agents identical)
+   ✓ Easier deployment and maintenance
+   ✓ More robust (no specialized agents)
+
+   Factors Favoring Auction:
+   ✓ Better raw performance
+   ✓ Optimal agent selection (distance-based)
+   ✓ Game-theoretic foundation
+   ✓ Systematic coordination
+   ✗ Higher complexity (1.3x cost)
+   ✗ Requires strategic agents
+
+6. WHEN TO CHOOSE EACH PROTOCOL:
+
+   Choose Call-Off when:
+   • Cost efficiency is priority
+   • System simplicity valued
+   • All agents should be equivalent
+   • Robust to agent failures needed
+
+
+   Choose Auction when:
+   • Raw performance is critical
+   • Optimal allocation needed
+   • Strategic agents available
+   • Game-theoretic guarantees desired
+   • Cost premium acceptable
+
+7. BREAK-EVEN ANALYSIS:
+
+   For auction to be cost-effective, need:
+   Performance gain > Cost premium
+
+   Required improvement: 33.3%
+   Actual improvement: 86.5%
+
+   Break-even: YES - Auction pays for itself
+
+8. PRACTICAL IMPLICATIONS:
+
+   Resource Budget Analysis:
+   If budget allows N total agent-units:
+
+   With Call-Off: N/3 = 33 tasks (if 100 units available)
+   With Auction:  N/4 = 25 tasks (if 100 units available)
+
+   Throughput difference: 32.0% more tasks with Call-Off
+
+   For equal throughput, Auction needs:
+   1.3x more budget than Call-Off
+
+9. FINAL RECOMMENDATION:
+
+   Based on cost-benefit analysis with Tc=3:
+
+   ★★★ AUCTION IS RECOMMENDED ★★★
+
+   Reasoning:
+   Auction provides 39.9% better cost-adjusted performance
+
+   The simpler, more cost-effective protocol should be preferred
+   unless there are specific requirements for game-theoretic optimality.

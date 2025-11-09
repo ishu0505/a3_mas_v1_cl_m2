@@ -12,7 +12,6 @@ sta_assignment/
 │   ├── agent.py              # Agent class (swarm + auction protocols)
 │   └── task.py               # Task class
 ├── experiments/
-│   ├── __init__.py
 │   ├── part1a.py             # Single agent experiment
 │   ├── part1b.py             # Multiple agents experiment
 │   ├── part1c.py             # Multi-agent coordination (Tc=3)
@@ -24,12 +23,8 @@ sta_assignment/
 │   └── part2c.py             # Cost-benefit analysis
 ├── results/                   # Output plots saved here
 ├── requirements.txt
-├── run_all_part1.py          # Run all Part 1 experiments
 ├── README.md
-├── PART1_SUMMARY.md          # Part 1 detailed analysis
-├── PART1EF_SUMMARY.md        # Communication protocols
-├── PART2_SUMMARY.md          # Part 2 game theory analysis
-└── QUICKSTART.md             # Quick start guide
+
 ```
 
 ## Installation
